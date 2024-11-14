@@ -25,10 +25,9 @@ public record AutorDTO(
 
     @Override
     public String toString() {
-        return "AutorDTO{" +
-                "nombre='" + nombre + '\'' +
-                ", fechaNacimiento=" + fechaNacimiento +
-                ", fechaMuerte=" + fechaMuerte +
-                '}';
+        return String.format("%s (Nacido: %d, Fallecido: %d)",
+                nombre,
+                fechaNacimiento,
+                fechaMuerte);
     }
 }

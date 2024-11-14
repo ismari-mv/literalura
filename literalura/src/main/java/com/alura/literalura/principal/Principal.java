@@ -1,7 +1,12 @@
 package com.alura.literalura.principal;
 
+import com.alura.literalura.dto.AutorDTO;
+import com.alura.literalura.excepciones.AutorNoEncontrado;
+import com.alura.literalura.excepciones.AutorVivoNoEncontrado;
+import com.alura.literalura.modelos.Autor;
 import com.alura.literalura.modelos.DatosLibro;
 import com.alura.literalura.modelos.Libro;
+import com.alura.literalura.repositorio.AutorRepository;
 import com.alura.literalura.repositorio.LibroRepository;
 import com.alura.literalura.service.ConsumoAPI;
 import com.alura.literalura.service.ConvierteDatos;
@@ -12,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.AuthProvider;
 import java.util.*;
 
 @Component
@@ -26,6 +32,12 @@ public class Principal {
 
     @Autowired
     private LibroRepository libroRepository;
+
+    @Autowired
+    private AutorRepository autorRepository;
+
+    @Autowired
+    private LibroService libroService;
 
     public Principal() {
 
@@ -53,6 +65,12 @@ public class Principal {
                 case 2:
                     mostrarListaDeLibros();
                     break;
+                case 3:
+                    mostrarListaDeAutores();
+                    break;
+                case 4:
+                    mostrarListaDeAutoresVivos();
+                    break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
                     break;
@@ -62,6 +80,28 @@ public class Principal {
         }
    }
 
+    private void mostrarListaDeAutoresVivos() {
+        System.out.println("Ingresa el año para buscar autores vivos: ");
+        var ano= teclado.nextInt();
+        teclado.nextLine();
+        try {
+            List<AutorDTO> autoresVivos = libroService.obtenerAutoresVivosPorAno(ano);
+            autoresVivos.forEach(System.out::println);
+        } catch (AutorVivoNoEncontrado e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    private void mostrarListaDeAutores() {
+        try {
+            List<AutorDTO> autorDTOS= libroService.obtenerAutoresRegistrados();
+            autorDTOS.forEach(System.out::println);
+        } catch (AutorNoEncontrado e){
+            System.out.println(e.getMessage());
+        }
+
+    }
 
 
     public void mostrarListaDeLibros() {
@@ -71,24 +111,19 @@ public class Principal {
 
 
     private void buscarLibroTitulo() {
-        System.out.println("Escribe el titulo del libro que deseas encontrar");
+        System.out.println("Escribe el titulo (o parte del titulo )del libro que deseas encontrar");
         var tituloLibro = teclado.nextLine();
         try {
             // Codifica el título del libro en formato URL
             String tituloCodificado = URLEncoder.encode(tituloLibro, StandardCharsets.UTF_8.toString());
             var json = consumoAPI.obtenerDatos(URL_BASE + tituloCodificado);
             System.out.println(json);
-            DatosLibro datosLibro = convierteDatos.obtenerDatos(json,DatosLibro.class);
+            DatosLibro datosLibro = convierteDatos.obtenerDatos(json, DatosLibro.class);
             Libro libro = new Libro(datosLibro.datosLibro().get(0));
             libroRepository.save(libro);
-
-
         } catch (UnsupportedEncodingException e) {
             System.out.println("Error al codificar el título: " + e.getMessage());
         }
-
-
-
     }
 
 

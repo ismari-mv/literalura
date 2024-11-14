@@ -1,5 +1,6 @@
 package com.alura.literalura.modelos;
 
+import com.fasterxml.jackson.core.PrettyPrinter;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class Libro {
     @Column(unique = true)
     private String titulo;
     private String genero;
-    private String idoma;
+    private String idioma;
     private Double numeroDescargas;
     private String portada;
 
@@ -26,7 +27,7 @@ public class Libro {
 
     public Libro(ResultsLibro datosLibro) {
         this.id = datosLibro.id();
-        this.idoma = String.valueOf(datosLibro.idioma());
+        this.idioma = String.valueOf(datosLibro.idioma());
         this.numeroDescargas = datosLibro.numeroDescargas();
         this.portada = datosLibro.formatos().get("image/jpeg");
         this.genero = datosLibro.genero().toString();
@@ -75,12 +76,12 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public String getIdoma() {
-        return idoma;
+    public String getIdioma() {
+        return idioma;
     }
 
     public void setIdoma(String idoma) {
-        this.idoma = idoma;
+        this.idioma = idoma;
     }
 
     public Double getNumeroDescargas() {
@@ -101,15 +102,13 @@ public class Libro {
 
     @Override
     public String toString() {
-        return "Libro{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", genero='" + genero + '\'' +
-                ", idoma='" + idoma + '\'' +
-                ", numeroDescargas=" + numeroDescargas +
-                ", portada='" + portada + '\'' +
-                ", autorList=" + autorList +
-                '}';
+        String autores = autorList.stream()
+                .map(Autor::getNombreAutor)
+                .collect(Collectors.joining(","));
+        return String.format("Libro {id=%d, titulo='%s', genero='%s',idioma='%s', numeroDescargas=%.1f," +
+                " portada='%s', autores='%s'}",
+                id,titulo,genero,idioma,numeroDescargas,portada,autores);
+
     }
 }
 
