@@ -54,6 +54,13 @@ public class LibroService {
         }
         return autoresVivos;
     }
+    public List<Libro> obtenerLibrosPorIdioma(String idioma) throws Exception {
+        List<Libro> libros = libroRepository.findByIdioma(idioma);
+        if (libros.isEmpty()) {
+            throw new Exception("No se encontraron libros en el idioma especificado: " + idioma);
+        }
+        return libros;
+    }
 
     }
 
