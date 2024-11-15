@@ -1,14 +1,14 @@
-##Literalura
+**Literalura
 Literalura es una aplicación de consola que permite gestionar libros y autores. Está diseñada para conectarse a una base de datos PostgreSQL, realizar consultas avanzadas y manejar datos de manera eficiente.
 
-##Características
+**Características
 Gestión de Libros
 
-##Buscar libros por idioma.
+**Buscar libros por idioma.
 Guardar libros en la base de datos.
 Manejar excepciones si no se encuentran libros registrados o si hay errores en los datos.
 
-##Gestión de Autores
+**Gestión de Autores
 Mostrar la lista de autores registrados.
 Buscar autores vivos en un año determinado.
 Manejar excepciones si no se encuentran autores que cumplan los criterios de búsqueda.
@@ -49,7 +49,7 @@ mvn spring-boot:run
 Uso
 Al iniciar la aplicación, verás un menú principal que permite realizar las siguientes acciones:
 
-##Mostrar lista de autores registrados.
+**Mostrar lista de autores registrados.
 Buscar autores vivos por un año específico.
 Buscar libros por idioma.
 Salir del programa.
